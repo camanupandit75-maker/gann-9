@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gann Square of 9</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+:root{--bg:#0a0a0f;--bg2:#0f0d07;--bg3:#060504;--gold:#f59e0b;--gold2:#e2c87a;--green:#10b981;--teal:#6ee7b7;--red:#ef4444;--orange:#f97316;--blue:#3b82f6;--purple:#a855f7;--pink:#ec4899;--cyan:#14b8a6;--border:#2a2010;--border2:#1a1510;--muted:#5a4820;--dim:#3a2c10;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'Share Tech Mono','Courier New',monospace;color:var(--gold2);min-height:100vh;overflow-x:hidden;}
+.header{background:linear-gradient(90deg,#0a0a0f,#1a1208,#0a0a0f);border-bottom:1px solid #3d2e0a;padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
+.logo{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:var(--gold);box-shadow:0 0 14px #f59e0b44;flex-shrink:0;animation:pulse 3s ease-in-out infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 14px #f59e0b44}50%{box-shadow:0 0 24px #f59e0b88}}
+.htitle{font-family:'Orbitron',monospace;font-size:16px;letter-spacing:4px;color:var(--gold);font-weight:700;}
+.hsub{font-size:8px;letter-spacing:3px;color:#7a6030;margin-top:2px;}
+.hright{margin-left:auto;font-size:8px;color:#4a3820;letter-spacing:2px;text-align:right;}
+.wrap{padding:16px 18px;max-width:900px;margin:0 auto;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px 16px;margin-bottom:14px;}
+.clabel{font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;}
+.presets{display:flex;gap:8px;flex-wrap:wrap;}
+.pbtn{background:var(--bg2);border:1px solid var(--border);border-radius:3px;font-size:10px;letter-spacing:1px;padding:5px 10px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.pbtn:hover{border-color:var(--gold);}
+.irow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+input[type=number],input[type=date]{width:100%;background:var(--bg3);border:1px solid #3d2e0a;border-radius:3px;color:var(--gold);font-size:22px;padding:7px 12px;outline:none;font-family:inherit;letter-spacing:2px;}
+input[type=date]{font-size:13px;}
+input:focus{border-color:var(--gold);}
+.smini{background:#0a0805;border:1px solid var(--border);border-radius:4px;padding:8px 12px;}
+.sml{font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:3px;}
+.smv{font-size:16px;font-weight:bold;}
+.degbtns{display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
+.dbtn{background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:#4a3820;font-size:12px;padding:5px 11px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.ubtn{background:transparent;border:1px solid var(--border);border-radius:3px;color:var(--dim);font-size:10px;padding:5px 10px;cursor:pointer;font-family:inherit;}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px;overflow-x:auto;}
+.tabs::-webkit-scrollbar{height:3px;} .tabs::-webkit-scrollbar-thumb{background:#3d2e0a;border-radius:2px;}
+.tbtn{background:transparent;border:none;border-bottom:2px solid transparent;color:#4a3820;font-size:10px;letter-spacing:2px;padding:7px 14px;cursor:pointer;font-family:inherit;margin-bottom:-1px;transition:all .15s;white-space:nowrap;}
+.tbtn.active{border-bottom-color:var(--gold);color:var(--gold);}
+.tc{animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{padding:7px 9px;font-size:9px;letter-spacing:2px;color:var(--muted);background:#0a0805;border-bottom:1px solid var(--border);font-weight:normal;text-align:center;white-space:nowrap;}
+td{padding:8px 9px;text-align:center;font-size:12px;letter-spacing:1px;white-space:nowrap;border-bottom:1px solid var(--border2);}
+.empty{text-align:center;color:var(--dim);padding:44px 0;font-size:12px;letter-spacing:2px;}
+.bbanner{border-left:4px solid;border-radius:4px;padding:14px 16px;margin-bottom:14px;}
+.btitle{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;letter-spacing:3px;margin-bottom:6px;}
+.lrow{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:3px;margin-bottom:3px;border:1px solid var(--border2);}
+.ldot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.scard{border-radius:4px;padding:14px;}
+.sc-long{background:#04130a;border:1px solid #10b98144;border-top:3px solid var(--green);}
+.sc-short{background:#130404;border:1px solid #ef444444;border-top:3px solid var(--red);}
+.srow{margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid;}
+.srl{font-size:8px;letter-spacing:2px;margin-bottom:2px;}
+.srv{font-size:11px;} .srv.big{font-size:14px;font-weight:bold;}
+.snote{font-size:9px;line-height:1.7;margin-top:6px;padding:8px;border-radius:3px;}
+.rules{border-radius:4px;padding:14px 16px;font-size:10px;line-height:2.1;}
+.rules div{color:var(--muted);}
+.rules span{color:var(--gold2);}
+.stat4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.sbox{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:11px 10px;text-align:center;}
+.sboxl{font-size:8px;letter-spacing:2px;color:var(--muted);margin-bottom:5px;}
+.sboxv{font-size:18px;font-weight:bold;}
+.gfill{padding:4px 10px;background:#0a0a14;border-radius:3px;border:1px dashed #3b82f622;margin:3px 0;}
+.mbtns{display:flex;gap:8px;margin-bottom:14px;}
+.mbtn{background:transparent;border:1px solid var(--border);border-radius:3px;color:#4a3820;font-size:10px;letter-spacing:2px;padding:6px 14px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.mbtn.active{background:#1a1208;border-color:var(--gold);color:var(--gold);}
+.hbtns{display:flex;gap:6px;}
+.hbtn{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:#4a3820;font-size:11px;padding:8px 10px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.hbtn.active{background:#1a1208;border-color:var(--gold);color:var(--gold);}
+.conf-banner{background:#0f0805;border:1px solid #ec4899aa;border-radius:4px;padding:14px 16px;margin-bottom:14px;}
+.crow{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:3px;margin-bottom:5px;border:1px solid;}
+.cbadge{font-size:9px;letter-spacing:1px;padding:3px 7px;border-radius:10px;border:1px solid;white-space:nowrap;}
+.tbtns{display:flex;gap:5px;margin-top:6px;}
+.tbtn2{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:#4a3820;font-size:10px;padding:7px 4px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.tbtn2.active{background:#1a1208;border-color:var(--gold);color:var(--gold);}
+.spiral{display:grid;grid-template-columns:repeat(13,1fr);gap:2px;max-width:500px;margin:0 auto;}
+.scell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:2px;cursor:default;transition:all .08s;border:1px solid;}
+.footer{margin-top:22px;padding-top:12px;border-top:1px solid var(--border2);font-size:9px;color:var(--dim);letter-spacing:2px;text-align:center;}
+@media(max-width:600px){.sgrid{grid-template-columns:1fr;}.stat4{grid-template-columns:repeat(2,1fr);}.irow{flex-direction:column;align-items:stretch;}.htitle{font-size:12px;letter-spacing:2px;}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">G</div>
+  <div><div class="htitle">GANN SQUARE OF 9</div><div class="hsub">PRICE · DEGREE · TIME CALCULATOR</div></div>
+  <div class="hright">W.D. GANN<br>METHOD</div>
+</div>
+<div class="wrap">
+  <div class="card"><div class="clabel">QUICK PRESETS</div><div class="presets" id="presets"></div></div>
+  <div class="card">
+    <div class="irow">
+      <div style="flex:1;min-width:170px"><div class="clabel">INPUT PRICE (YESTERDAY'S CLOSE)</div><input type="number" id="priceInput" placeholder="e.g. 23842" oninput="onPC()"></div>
+      <div class="smini" id="sqB" style="display:none"><div class="sml">√ PRICE</div><div class="smv" id="sqV" style="color:#10b981"></div><div style="font-size:9px;color:#4a3820;margin-top:2px" id="unitV"></div></div>
+      <div class="smini" id="s45B" style="display:none"><div class="sml">45° STEP</div><div class="smv" id="s45V" style="color:#f59e0b"></div><div style="font-size:9px;color:#4a3820;margin-top:2px">pts per 45°</div></div>
+      <div class="smini" id="s90B" style="display:none"><div class="sml">90° STEP</div><div class="smv" id="s90V" style="color:#10b981"></div><div style="font-size:9px;color:#4a3820;margin-top:2px">pts per 90°</div></div>
+    </div>
+  </div>
+  <div class="card"><div class="clabel">SELECT DEGREES</div><div class="degbtns" id="degBtns"></div></div>
+  <div class="tabs">
+    <button class="tbtn active" onclick="sw('levels')">PRICE LEVELS</button>
+    <button class="tbtn" onclick="sw('intraday')">⚡ INTRADAY</button>
+    <button class="tbtn" onclick="sw('positional')">📈 POSITIONAL</button>
+    <button class="tbtn" onclick="sw('wheel')">DEGREE WHEEL</button>
+    <button class="tbtn" onclick="sw('grid')">SPIRAL GRID</button>
+    <button class="tbtn" onclick="sw('time')">TIME ANGLE</button>
+  </div>
+  <div id="tlevels" class="tc"></div>
+  <div id="tintraday" class="tc" style="display:none"></div>
+  <div id="tpositional" class="tc" style="display:none"></div>
+  <div id="twheel" class="tc" style="display:none"></div>
+  <div id="tgrid" class="tc" style="display:none"></div>
+  <div id="ttime" class="tc" style="display:none"></div>
+  <div class="footer">GANN SQUARE OF 9 · FOR EDUCATIONAL & RESEARCH USE ONLY · NOT INVESTMENT ADVICE</div>
+</div>
+<script>
+const DC={45:'#f59e0b',90:'#10b981',135:'#3b82f6',180:'#ef4444',225:'#a855f7',270:'#f97316',315:'#14b8a6',360:'#ec4899'};
+const DL={45:'NE',90:'N',135:'NW',180:'W',225:'SW',270:'S',315:'SE',360:'E'};
+const AD=[45,90,135,180,225,270,315,360];
+const PR=[{label:'NIFTY 50',value:24500,color:'#f59e0b'},{label:'BANKNIFTY',value:52000,color:'#10b981'},{label:'NIFTY IT',value:37000,color:'#3b82f6'},{label:'SENSEX',value:80500,color:'#ef4444'},{label:'FINNIFTY',value:23500,color:'#a855f7'},{label:'MIDCAP SEL',value:12800,color:'#f97316'}];
+let S={price:0,degs:[45,90,180,360],tab:'levels',open:0,pm3:0,hold:1,sd:'2024-06-04',ed:new Date().toISOString().split('T')[0],ap:0,cp:0,tol:0.5,tdeg:360,tmode:'calendar'};
+
+function GL(p,degs){
+  if(!p||p<=0)return[];
+  const sq=Math.sqrt(p);
+  return degs.map(deg=>{
+    const f=deg/360,r=[],s=[];
+    for(let c=1;c<=3;c++){r.push(+(Math.pow(sq+f*c,2)).toFixed(2));s.push(+(Math.pow(Math.max(.01,sq-f*c),2)).toFixed(2));}
+    return{deg,r,s};
+  });
+}
+function AFL(p,degs){
+  const a=[];
+  GL(p,degs).forEach(({deg,r,s})=>{r.forEach((v,i)=>a.push({v,deg,label:`R${i+1}(${deg}°)`}));s.forEach((v,i)=>a.push({v,deg,label:`S${i+1}(${deg}°)`}));});
+  a.sort((a,b)=>a.v-b.v);
+  const d=[];
+  a.forEach(x=>{const l=d[d.length-1];if(!l||Math.abs(x.v-l.v)>2)d.push({...x});else d[d.length-1].label+='+'+x.label;});
+  return d;
+}
+function addCD(s,n){const d=new Date(s);d.setDate(d.getDate()+n);return d.toISOString().split('T')[0];}
+function addTD(s,n){const d=new Date(s);let c=0;while(c<Math.abs(n)){d.setDate(d.getDate()+(n>0?1:-1));if(d.getDay()!==0&&d.getDay()!==6)c++;}return d.toISOString().split('T')[0];}
+function cTD(s,e){let c=0;const cur=new Date(s),end=new Date(e);while(cur<=end){if(cur.getDay()!==0&&cur.getDay()!==6)c++;cur.setDate(cur.getDate()+1);}return c;}
+function fi(n){return Math.round(n).toLocaleString('en-IN');}
+function f2(n){return n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function wd(d){return new Date(d).toLocaleDateString('en-IN',{weekday:'short'});}
+
+// Build spiral
+function BS(){
+  const g=Array.from({length:13},()=>Array(13).fill(null));
+  let x=6,y=6,n=1,step=1,dir=0;const dx=[0,1,0,-1],dy=[1,0,-1,0];
+  g[y][x]=n++;
+  while(n<=169){for(let t=0;t<2;t++){for(let s=0;s<step;s++){x+=dx[dir];y+=dy[dir];if(x>=0&&x<13&&y>=0&&y<13)g[y][x]=n++;if(n>169)break;}dir=(dir+1)%4;if(n>169)break;}step++;}
+  return g;
+}
+const SPIRAL=BS();
+
+// Init
+function init(){
+  // Presets
+  const pe=document.getElementById('presets');
+  PR.forEach(p=>{
+    const b=document.createElement('button');b.className='pbtn';b.style.color=p.color;b.style.borderColor='#2a2010';
+    b.innerHTML=`<span style="font-weight:bold;display:block">${p.label}</span><span style="font-size:9px;opacity:.6">${p.value.toLocaleString('en-IN')}</span>`;
+    b.onclick=()=>{document.getElementById('priceInput').value=p.value;S.price=p.value;onPC(true);};
+    pe.appendChild(b);
+  });
+  // Degree buttons
+  const de=document.getElementById('degBtns');
+  AD.forEach(d=>{
+    const b=document.createElement('button');b.id='db'+d;b.className='dbtn';
+    b.innerHTML=`${d}° <span style="font-size:8px;opacity:.6">${DL[d]}</span>`;
+    b.onclick=()=>tgD(d);de.appendChild(b);
+  });
+  const all=document.createElement('button');all.className='ubtn';all.textContent='ALL';all.onclick=()=>{S.degs=[...AD];rfD();render();};de.appendChild(all);
+  const none=document.createElement('button');none.className='ubtn';none.textContent='NONE';none.onclick=()=>{S.degs=[];rfD();render();};de.appendChild(none);
+  rfD();render();
+}
+
+function rfD(){
+  AD.forEach(d=>{
+    const b=document.getElementById('db'+d);if(!b)return;
+    const on=S.degs.includes(d);
+    b.style.color=on?DC[d]:'#4a3820';b.style.borderColor=on?DC[d]:'#2a2010';b.style.background=on?DC[d]+'22':'#060504';
+    b.style.boxShadow=on?`0 0 6px ${DC[d]}`:'none';
+  });
+}
+function tgD(d){S.degs=S.degs.includes(d)?S.degs.filter(x=>x!==d):[...S.degs,d].sort((a,b)=>a-b);rfD();render();}
+
+function onPC(fp=false){
+  if(!fp)S.price=parseFloat(document.getElementById('priceInput').value)||0;
+  const p=S.price,sq=p>0?Math.sqrt(p):0;
+  ['sqB','s45B','s90B'].forEach(id=>document.getElementById(id).style.display=p>0?'':'none');
+  if(p>0){
+    document.getElementById('sqV').textContent=sq.toFixed(4);
+    document.getElementById('unitV').textContent=`1 unit = ${(1/sq*100).toFixed(3)}%`;
+    document.getElementById('s45V').textContent=(Math.pow(sq+.125,2)-p).toFixed(1);
+    document.getElementById('s90V').textContent=(Math.pow(sq+.25,2)-p).toFixed(1);
+  }
+  render();
+}
+
+function sw(tab){
+  S.tab=tab;
+  document.querySelectorAll('.tbtn').forEach((b,i)=>b.classList.toggle('active',['levels','intraday','positional','wheel','grid','time'][i]===tab));
+  ['levels','intraday','positional','wheel','grid','time'].forEach(t=>{document.getElementById('t'+t).style.display=t===tab?'':'none';});
+  render();
+}
+function render(){
+  const t=S.tab;
+  if(t==='levels')rL();else if(t==='intraday')rI();else if(t==='positional')rP();
+  else if(t==='wheel')rW();else if(t==='grid')rG();else if(t==='time')rT();
+}
+
+// ── LEVELS ────────────────────────────────────────────────────────────────────
+function rL(){
+  const el=document.getElementById('tlevels'),p=S.price;
+  if(!p||p<=0){el.innerHTML='<div class="empty">ENTER A PRICE TO COMPUTE GANN LEVELS</div>';return;}
+  const lvls=GL(p,S.degs);
+  let h=`<div style="overflow-x:auto;margin-bottom:16px"><table><thead><tr><th>DEG</th><th style="color:#ef4444">R3</th><th style="color:#f97316">R2</th><th style="color:#f59e0b">R1</th><th style="color:#6ee7b7">▶ ${fi(p)} ◀</th><th style="color:#10b981">S1</th><th style="color:#3b82f6">S2</th><th style="color:#6366f1">S3</th><th style="color:#5a4820">±45°</th></tr></thead><tbody>`;
+  lvls.forEach(({deg,r,s})=>{
+    h+=`<tr><td style="color:${DC[deg]};font-weight:bold;border-left:3px solid ${DC[deg]}">${deg}°<br><span style="font-size:9px;color:#4a3820;font-weight:normal">${DL[deg]}</span></td>`;
+    [...r].reverse().forEach((v,i)=>h+=`<td style="color:${['#ef4444','#f97316','#f59e0b'][i]};background:#0f0a04">${f2(v)}</td>`);
+    h+=`<td style="background:#0d1a0d;color:#6ee7b7;font-weight:bold">●</td>`;
+    s.forEach((v,i)=>h+=`<td style="color:${['#10b981','#3b82f6','#6366f1'][i]};background:#040d0a">${f2(v)}</td>`);
+    h+=`<td style="color:#5a4820;font-size:10px">±${(r[0]-p).toFixed(1)}</td></tr>`;
+  });
+  h+=`</tbody></table></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px">`;
+  lvls.forEach(({deg,r,s})=>{
+    h+=`<div style="background:#0f0d07;border:1px solid ${DC[deg]}33;border-radius:4px;padding:11px 13px;border-left:3px solid ${DC[deg]}">
+      <div style="color:${DC[deg]};font-size:14px;font-weight:bold;margin-bottom:6px;display:flex;justify-content:space-between"><span>${deg}° <span style="font-size:9px;color:#4a3820">${DL[deg]}</span></span><span style="font-size:9px;color:#4a3820">${(deg/360).toFixed(4)}×</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px">
+        <div>${r.map((v,i)=>`<div style="color:${['#f59e0b','#f97316','#ef4444'][i]};margin-bottom:2px">R${i+1}: ${fi(v)}</div>`).join('')}</div>
+        <div style="text-align:right">${s.map((v,i)=>`<div style="color:${['#10b981','#3b82f6','#6366f1'][i]};margin-bottom:2px">S${i+1}: ${fi(v)}</div>`).join('')}</div>
+      </div></div>`;
+  });
+  h+=`</div><div style="margin-top:10px;font-size:9px;color:#3a2c10;letter-spacing:2px">FORMULA: (√P ± N·DEG/360)²</div>`;
+  el.innerHTML=h;
+}
+
+// ── INTRADAY ──────────────────────────────────────────────────────────────────
+function rI(){
+  const el=document.getElementById('tintraday'),rp=S.price;
+  if(!rp||rp<=0){el.innerHTML='<div class="empty">ENTER YESTERDAY\'S CLOSE IN THE PRICE INPUT ABOVE FIRST</div>';return;}
+  const l4=GL(rp,[45,90,180,360]),all=AFL(rp,[45,90,180,360]),op=S.open;
+  let h=`<div style="font-size:9px;color:#4a3820;letter-spacing:2px;margin-bottom:14px">INTRADAY SETUP · REF CLOSE: <span style="color:#f59e0b">${fi(rp)}</span></div>
+  <div class="card"><div class="irow">
+    <div style="flex:1;min-width:180px"><div class="clabel">TODAY'S OPENING PRICE</div>
+    <input type="number" id="opI" value="${op||''}" placeholder="e.g. ${(rp+50).toFixed(0)}" oninput="S.open=parseFloat(this.value)||0;rI()"></div>`;
+  if(op>0){const g=op-rp;h+=`<div class="smini"><div class="sml">GAP FROM CLOSE</div><div class="smv" style="color:${g>=0?'#10b981':'#ef4444'}">${g>=0?'+':''}${g.toFixed(0)} pts</div><div style="font-size:9px;color:#4a3820;margin-top:2px">${(g/rp*100).toFixed(2)}%</div></div>`;}
+  h+=`</div></div>`;
+  if(!op||op<=0){el.innerHTML=h+'<div class="empty">ENTER TODAY\'S OPEN TO GENERATE SETUP</div>';return;}
+
+  const abv=all.filter(x=>x.v>op+2).sort((a,b)=>a.v-b.v);
+  const blw=all.filter(x=>x.v<op-2).sort((a,b)=>b.v-a.v);
+  const gf=all.filter(x=>op>rp?(x.v>rp&&x.v<op):(x.v<rp&&x.v>op)).sort((a,b)=>b.v-a.v);
+  const r45=l4.find(l=>l.deg===45),r90=l4.find(l=>l.deg===90),r180=l4.find(l=>l.deg===180);
+  const bC=[r45?.r[0],r90?.r[0],r180?.r[0]].filter(v=>v&&op>v);
+  const bD=[r45?.s[0],r90?.s[0],r180?.s[0]].filter(v=>v&&op<v);
+  const gap=op-rp;
+  let bias,bc,bn;
+  if(gap>0){
+    if(bC.length>=2){bias='STRONG BULLISH';bc='#10b981';bn=`Gapped above ${bC.length} Gann resistance levels — strong continuation expected`;}
+    else if(bC.length===1){bias='BULLISH';bc='#6ee7b7';bn=`Gapped above 45° R1 (${r45?.r[0].toFixed(0)}) — bullish bias`;}
+    else{bias='NEUTRAL GAP UP';bc='#f59e0b';bn=`Gap up but below 45° R1 (${r45?.r[0].toFixed(0)}) — watch first hurdle`;}
+  }else if(gap<0){
+    if(bD.length>=2){bias='STRONG BEARISH';bc='#ef4444';bn=`Gapped below ${bD.length} Gann support levels — strong continuation down`;}
+    else if(bD.length===1){bias='BEARISH';bc='#f97316';bn=`Gapped below 45° S1 — bearish bias`;}
+    else{bias='NEUTRAL GAP DOWN';bc='#f59e0b';bn=`Gap down but above S1 — wait for breakdown`;}
+  }else{bias='FLAT OPEN';bc='#f59e0b';bn='Flat open — wait for 15-min candle break';}
+
+  const nR=abv[0],R2=abv[1],R3=abv[2],nS=blw[0],S2=blw[1],S3=blw[2];
+  const buf=nR?Math.max(5,+((nR.v-op)*.12).toFixed(0)):10;
+  const zone=nR&&nS?`${nS.label} (${nS.v.toFixed(0)}) ↔ OPEN ↔ ${nR.label} (${nR.v.toFixed(0)})`:'—';
+  const lrr=nR&&nS&&R2?((R2.v-nR.v)/Math.max(1,nR.v-nS.v)).toFixed(1):null;
+  const srr=nS&&nR&&S2?((nS.v-S2.v)/Math.max(1,nR.v-nS.v)).toFixed(1):null;
+
+  h+=`<div class="bbanner" style="background:${bc}18;border-color:${bc}55;border-left-color:${bc}">
+    <div class="btitle" style="color:${bc}">${bias}</div>
+    <div style="font-size:10px;color:#7a6030">${bn}</div>
+    <div style="margin-top:8px;font-size:10px;color:#4a3820">📍 ZONE: <span style="color:#e2c87a">${zone}</span></div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="clabel" style="margin:0">LEVEL LADDER (RELATIVE TO OPEN)</div>
+      <div style="font-size:9px;color:#3a2c10">🟠 RESISTANCE · 🔵 SUPPORT</div>
+    </div>`;
+  abv.slice(0,4).reverse().forEach(r=>{h+=`<div class="lrow" style="background:#100a02;border-color:#2a1a08"><div class="ldot" style="background:${DC[r.deg]};box-shadow:0 0 4px ${DC[r.deg]}"></div><div style="font-size:11px;color:${DC[r.deg]};flex:1">${r.label}</div><div style="font-size:14px;color:#f59e0b;font-weight:bold;min-width:60px;text-align:right">${r.v.toFixed(0)}</div><div style="font-size:9px;color:#5a3820;min-width:70px;text-align:right">+${(r.v-op).toFixed(0)} pts ▲</div></div>`;});
+  h+=`<div class="lrow" style="background:#0d1a0d;border-color:#10b98155;margin:2px 0"><div class="ldot" style="background:#6ee7b7;width:10px;height:10px;box-shadow:0 0 8px #6ee7b7"></div><div style="font-size:11px;color:#6ee7b7;font-weight:bold;flex:1;letter-spacing:1px">TODAY'S OPEN</div><div style="font-size:16px;color:#6ee7b7;font-weight:bold">${op.toLocaleString('en-IN')}</div><div style="font-size:9px;color:#10b981;margin-left:4px">▶ NOW</div></div>`;
+  if(gf.length>0){h+=`<div class="gfill"><div style="font-size:8px;letter-spacing:2px;color:#3b82f6;margin-bottom:3px">── GAP FILL ZONE ──</div>${gf.slice(0,3).map(g=>`<div style="display:flex;justify-content:space-between;font-size:10px;color:#3b82f688;padding:2px 0"><span>${g.label}</span><span>${g.v.toFixed(0)}</span></div>`).join('')}</div>`;}
+  h+=`<div class="lrow" style="background:#0a0805"><div class="ldot" style="background:#5a4820"></div><div style="font-size:10px;color:#5a4820;flex:1">PREV CLOSE</div><div style="font-size:12px;color:#7a6030">${rp.toLocaleString('en-IN')}</div><div style="font-size:9px;color:#3a2c10">${Math.abs(gap).toFixed(0)} pts ${gap>0?'below':'above'}</div></div>`;
+  blw.slice(0,4).forEach(s=>{h+=`<div class="lrow" style="background:#02080f;border-color:#0a1a2a"><div class="ldot" style="border:2px solid ${DC[s.deg]};background:none"></div><div style="font-size:11px;color:${DC[s.deg]};flex:1">${s.label}</div><div style="font-size:14px;color:#3b82f6;font-weight:bold;min-width:60px;text-align:right">${s.v.toFixed(0)}</div><div style="font-size:9px;color:#1a3a5a;min-width:70px;text-align:right">-${(op-s.v).toFixed(0)} pts ▼</div></div>`;});
+  h+=`</div><div class="sgrid">
+    <div class="scard sc-long"><div style="font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:3px;color:#10b981;margin-bottom:12px">▲ LONG SETUP</div>`;
+  [{l:'ENTRY TRIGGER',v:nR?`Break & 15-min close above ${nR.label} (${nR.v.toFixed(0)})`:'—',c:'#6ee7b7',big:0},
+   {l:'ENTRY PRICE',v:nR?(nR.v+buf).toFixed(0):'—',c:'#6ee7b7',big:1},
+   {l:`T1 ${R2?.label||''}`,v:R2?R2.v.toFixed(0):'—',c:'#f59e0b',big:1},
+   {l:`T2 ${R3?.label||''}`,v:R3?R3.v.toFixed(0):'—',c:'#f97316',big:1},
+   {l:`STOP ${nS?.label||''}`,v:nS?nS.v.toFixed(0):'—',c:'#ef4444',big:1},
+   {l:'R:R',v:lrr?`1 : ${lrr}`:'—',c:'#a855f7',big:0}
+  ].forEach(({l,v,c,big})=>h+=`<div class="srow" style="border-color:#0d1a0d"><div class="srl" style="color:#2a4a30">${l}</div><div class="srv${big?' big':''}" style="color:${c}">${v}</div></div>`);
+  h+=`<div class="snote" style="background:#021008;color:#2a4a30">SL on 15-min candle close · Trail SL to entry after T1</div></div>
+    <div class="scard sc-short"><div style="font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:3px;color:#ef4444;margin-bottom:12px">▼ SHORT SETUP</div>`;
+  [{l:'ENTRY TRIGGER',v:nS?`Break & 15-min close below ${nS.label} (${nS.v.toFixed(0)})`:'—',c:'#fca5a5',big:0},
+   {l:'ENTRY PRICE',v:nS?(nS.v-buf).toFixed(0):'—',c:'#fca5a5',big:1},
+   {l:`T1 ${S2?.label||''}`,v:S2?S2.v.toFixed(0):'—',c:'#10b981',big:1},
+   {l:`T2 ${S3?.label||''}`,v:S3?S3.v.toFixed(0):'—',c:'#3b82f6',big:1},
+   {l:`STOP ${nR?.label||''}`,v:nR?nR.v.toFixed(0):'—',c:'#f97316',big:1},
+   {l:'R:R',v:srr?`1 : ${srr}`:'—',c:'#a855f7',big:0}
+  ].forEach(({l,v,c,big})=>h+=`<div class="srow" style="border-color:#1a0d0d"><div class="srl" style="color:#4a2a2a">${l}</div><div class="srv${big?' big':''}" style="color:${c}">${v}</div></div>`);
+  h+=`<div class="snote" style="background:#100202;color:#4a2a2a">SL on 15-min candle close · Trail SL to entry after T1</div></div></div>
+  <div class="rules card">
+    <div style="font-size:9px;letter-spacing:3px;color:#4a3820;margin-bottom:8px">INTRADAY RULES</div>
+    <div>① <span>BIAS</span> — count Gann levels cleared overnight: more = stronger bias</div>
+    <div>② <span>LEVEL LADDER</span> — all levels relative to open, not close</div>
+    <div>③ <span>ENTRY</span> — 15-min candle close beyond level + buffer</div>
+    <div>④ <span>T1</span> — book 50% · move SL to entry · let rest run to T2</div>
+    <div>⑤ <span>GAP FILL ZONE</span> — levels between close and open are magnets</div>
+    <div>⑥ <span>180° LEVEL</span> — high probability reversal · consider squaring off</div>
+  </div>`;
+  el.innerHTML=h;
+}
+
+// ── POSITIONAL ────────────────────────────────────────────────────────────────
+function rP(){
+  const el=document.getElementById('tpositional'),cp=S.price,pm3=S.pm3;
+  if(!cp||cp<=0){el.innerHTML='<div class="empty">ENTER PREVIOUS CLOSE IN THE PRICE INPUT ABOVE FIRST</div>';return;}
+  const cl=GL(cp,[45,90,180,360]);
+  const cr45=cl.find(l=>l.deg===45),cr90=cl.find(l=>l.deg===90),cr180=cl.find(l=>l.deg===180);
+  let h=`<div style="font-size:9px;color:#4a3820;letter-spacing:2px;margin-bottom:14px">POSITIONAL SETUP · PREV CLOSE: <span style="color:#f59e0b">${fi(cp)}</span> · ANCHOR = 3PM PRICE</div>
+  <div class="card"><div class="irow">
+    <div style="flex:1;min-width:180px"><div class="clabel">3 PM PRICE (TODAY'S ANCHOR)</div>
+    <input type="number" id="pmI" value="${pm3||''}" placeholder="e.g. ${(cp+120).toFixed(0)}" oninput="S.pm3=parseFloat(this.value)||0;rP()"></div>
+    <div><div class="clabel">HOLDING PERIOD</div><div class="hbtns">${[1,2,3,5].map(d=>`<button class="hbtn${S.hold===d?' active':''}" onclick="S.hold=${d};rP()">${d}D</button>`).join('')}</div></div>
+    ${pm3>0?`<div class="smini"><div class="sml">MOVE FROM CLOSE</div><div class="smv" style="color:${pm3>=cp?'#10b981':'#ef4444'}">${pm3>=cp?'+':''}${(pm3-cp).toFixed(0)} pts</div><div style="font-size:9px;color:#4a3820;margin-top:2px">${((pm3-cp)/cp*100).toFixed(2)}%</div></div>`:''}
+  </div></div>`;
+  if(!pm3||pm3<=0){el.innerHTML=h+'<div class="empty">ENTER 3 PM PRICE TO GENERATE POSITIONAL PLAN</div>';return;}
+
+  const pl=GL(pm3,[45,90,180,360]);
+  const pr45=pl.find(l=>l.deg===45),pr90=pl.find(l=>l.deg===90),pr180=pl.find(l=>l.deg===180),pr360=pl.find(l=>l.deg===360);
+  const bC=[cr45?.r[0],cr90?.r[0],cr180?.r[0]].filter(v=>v&&pm3>v);
+  const bD=[cr45?.s[0],cr90?.s[0],cr180?.s[0]].filter(v=>v&&pm3<v);
+  let trend,tc,tn,str;
+  if(bC.length>=2){trend='STRONG BULL';tc='#10b981';str=3;tn=`3PM above ${bC.length} resistance levels — momentum strongly up`;}
+  else if(bC.length===1){trend='BULLISH';tc='#6ee7b7';str=2;tn=`3PM above 45° R1 (${cr45?.r[0].toFixed(0)}) — bias up`;}
+  else if(bD.length>=2){trend='STRONG BEAR';tc='#ef4444';str=-3;tn=`3PM below ${bD.length} support levels — momentum strongly down`;}
+  else if(bD.length===1){trend='BEARISH';tc='#f97316';str=-2;tn=`3PM below 45° S1 — bias down`;}
+  else{trend='NEUTRAL';tc='#f59e0b';str=0;tn='3PM within 45° band — no clear edge, avoid overnight';}
+
+  const buf=pr45?Math.max(5,+((pr45.r[0]-pm3)*.12).toFixed(0)):15;
+  const isTL=str>=2,iTS=str<=-2;
+
+  // ── LONG: targets always ABOVE entry ──────────────────────────────────────
+  // Trend follow: entry=S1(45°), targets=R1→R2→R3→R4
+  // Breakout:     entry=R1+buf,  targets=R2→R3→R4 (R1 below entry, skip)
+  const lEntry=isTL?pr45?.s[0]:(pr45?(pr45.r[0]+buf):null);
+  const long={
+    type:isTL?'TREND FOLLOW':'BREAKOUT',
+    em:isTL?`Buy dip to 45° S1 zone (${pr45?.s[0].toFixed(0)}) next day`:`Buy 15-min close above 45° R1 (${pr45?.r[0].toFixed(0)}) next day`,
+    entry:lEntry?lEntry.toFixed(0):null,
+    t1:isTL?pr45?.r[0].toFixed(0):pr90?.r[0].toFixed(0),  t1l:isTL?'45° R1':'90° R1',
+    t2:isTL?pr90?.r[0].toFixed(0):pr180?.r[0].toFixed(0), t2l:isTL?'90° R1':'180° R1',
+    t3:isTL?pr180?.r[0].toFixed(0):pr360?.r[0].toFixed(0),t3l:isTL?'180° R1':'360° R1',
+    t4:isTL?pr360?.r[0].toFixed(0):null,                  t4l:isTL?'360° R1':'—',
+    sl:pr90?.s[0].toFixed(0),sll:'90° S1 — daily close basis',
+    sz:str>=3?'Full (100%)':str>=2?'75%':'50% — wait confirmation',
+  };
+
+  // ── SHORT: targets always BELOW entry ─────────────────────────────────────
+  // Trend follow: entry=R1(45°), targets=S1→S2→S3→S4
+  // Breakdown:    entry=S1-buf,  targets=S2→S3→S4 (S1 above entry, skip)
+  const sEntry=iTS?pr45?.r[0]:(pr45?(pr45.s[0]-buf):null);
+  const short={
+    type:iTS?'TREND FOLLOW':'BREAKDOWN',
+    em:iTS?`Sell rally to 45° R1 zone (${pr45?.r[0].toFixed(0)}) next day`:`Sell 15-min close below 45° S1 (${pr45?.s[0].toFixed(0)}) next day`,
+    entry:sEntry?sEntry.toFixed(0):null,
+    t1:iTS?pr45?.s[0].toFixed(0):pr90?.s[0].toFixed(0),  t1l:iTS?'45° S1':'90° S1',
+    t2:iTS?pr90?.s[0].toFixed(0):pr180?.s[0].toFixed(0), t2l:iTS?'90° S1':'180° S1',
+    t3:iTS?pr180?.s[0].toFixed(0):pr360?.s[0].toFixed(0),t3l:iTS?'180° S1':'360° S1',
+    t4:iTS?pr360?.s[0].toFixed(0):null,                  t4l:iTS?'360° S1':'—',
+    sl:pr90?.r[0].toFixed(0),sll:'90° R1 — daily close basis',
+    sz:str<=-3?'Full (100%)':str<=-2?'75%':'50% — wait confirmation',
+  };
+
+  h+=`<div class="bbanner" style="background:${tc}18;border-color:${tc}55;border-left-color:${tc}">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-family:'Orbitron',monospace;font-size:16px;font-weight:700;letter-spacing:3px;color:${tc}">${trend}</div>
+      <div>${[1,2,3].map(i=>`<span style="display:inline-block;width:14px;height:14px;border-radius:2px;background:${Math.abs(str)>=i?tc:tc+'33'};margin-right:3px"></span>`).join('')}</div>
+    </div>
+    <div style="font-size:10px;color:#7a6030;margin-top:6px">${tn}</div>
+    <div style="margin-top:8px;display:flex;gap:20px;font-size:10px;flex-wrap:wrap">
+      <span style="color:#4a3820">3PM vs CLOSE: <span style="color:${(pm3-cp)>=0?'#10b981':'#ef4444'};font-weight:bold">${(pm3-cp)>=0?'+':''}${(pm3-cp).toFixed(0)} pts</span></span>
+      <span style="color:#4a3820">HOLD: <span style="color:#f59e0b">${S.hold} day${S.hold>1?'s':''}</span></span>
+    </div>
+  </div>
+  <div class="card" style="overflow-x:auto"><div class="clabel">NEXT-DAY GANN LEVELS FROM 3PM ANCHOR (${fi(pm3)})</div>
+  <table><thead><tr><th>DEG</th><th style="color:#ef4444">R2</th><th style="color:#f59e0b">R1</th><th style="color:#6ee7b7">3PM</th><th style="color:#10b981">S1</th><th style="color:#3b82f6">S2</th></tr></thead><tbody>`;
+  [45,90,180,360].forEach(deg=>{
+    const lv=pl.find(l=>l.deg===deg);
+    h+=`<tr><td style="color:${DC[deg]};font-weight:bold;border-left:3px solid ${DC[deg]}">${deg}°</td><td style="color:#ef4444;background:#100804">${lv?.r[1].toFixed(0)||'—'}</td><td style="color:#f59e0b;background:#0f0a04;font-weight:bold">${lv?.r[0].toFixed(0)||'—'}</td><td style="color:#6ee7b7;background:#0d1a0d;font-weight:bold">●</td><td style="color:#10b981;background:#040d0a;font-weight:bold">${lv?.s[0].toFixed(0)||'—'}</td><td style="color:#3b82f6;background:#04080f">${lv?.s[1].toFixed(0)||'—'}</td></tr>`;
+  });
+  h+=`</tbody></table></div><div class="sgrid">
+    <div class="scard sc-long"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:#10b981">▲ LONG</div><div style="font-size:9px;color:#2a4a30;background:#0a2a1a;padding:3px 8px;border-radius:10px">${long.type}</div></div>`;
+  [{l:'ENTRY METHOD',v:long.em,c:'#6ee7b7',big:0},{l:'ENTRY ZONE',v:long.entry?(+long.entry).toLocaleString('en-IN'):'—',c:'#6ee7b7',big:1},
+   {l:`T1 · ${long.t1l}`,v:long.t1?(+long.t1).toLocaleString('en-IN'):'—',c:'#f59e0b',big:1},{l:`T2 · ${long.t2l}`,v:long.t2?(+long.t2).toLocaleString('en-IN'):'—',c:'#f97316',big:1},
+   {l:`T3 · ${long.t3l}`,v:long.t3?(+long.t3).toLocaleString('en-IN'):'—',c:'#ef4444',big:S.hold>=3},{l:`T4 · ${long.t4l}`,v:long.t4?(+long.t4).toLocaleString('en-IN'):'—',c:'#a855f7',big:S.hold>=5},
+   {l:`SL · ${long.sll}`,v:long.sl?(+long.sl).toLocaleString('en-IN'):'—',c:'#ef4444',big:1}
+  ].forEach(({l,v,c,big})=>h+=`<div class="srow" style="border-color:#0d1a0d"><div class="srl" style="color:#2a4a30">${l}</div><div class="srv${big?' big':''}" style="color:${c}">${v}</div></div>`);
+  h+=`<div class="snote" style="background:#021008;color:#2a4a30"><div style="color:#3a6a40;margin-bottom:2px">SIZE: ${long.sz}</div>After T1: SL→entry. After T2: SL→T1. Daily close SL.</div></div>
+    <div class="scard sc-short"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:#ef4444">▼ SHORT</div><div style="font-size:9px;color:#4a2a2a;background:#2a0a0a;padding:3px 8px;border-radius:10px">${short.type}</div></div>`;
+  [{l:'ENTRY METHOD',v:short.em,c:'#fca5a5',big:0},{l:'ENTRY ZONE',v:short.entry?(+short.entry).toLocaleString('en-IN'):'—',c:'#fca5a5',big:1},
+   {l:`T1 · ${short.t1l}`,v:short.t1?(+short.t1).toLocaleString('en-IN'):'—',c:'#10b981',big:1},{l:`T2 · ${short.t2l}`,v:short.t2?(+short.t2).toLocaleString('en-IN'):'—',c:'#3b82f6',big:1},
+   {l:`T3 · ${short.t3l}`,v:short.t3?(+short.t3).toLocaleString('en-IN'):'—',c:'#6366f1',big:S.hold>=3},{l:`T4 · ${short.t4l}`,v:short.t4?(+short.t4).toLocaleString('en-IN'):'—',c:'#a855f7',big:S.hold>=5},
+   {l:`SL · ${short.sll}`,v:short.sl?(+short.sl).toLocaleString('en-IN'):'—',c:'#f97316',big:1}
+  ].forEach(({l,v,c,big})=>h+=`<div class="srow" style="border-color:#1a0d0d"><div class="srl" style="color:#4a2a2a">${l}</div><div class="srv${big?' big':''}" style="color:${c}">${v}</div></div>`);
+  h+=`<div class="snote" style="background:#100202;color:#4a2a2a"><div style="color:#6a3a3a;margin-bottom:2px">SIZE: ${short.sz}</div>After T1: SL→entry. After T2: SL→T1. Daily close SL.</div></div></div>
+  <div class="rules card">
+    <div style="font-size:9px;letter-spacing:3px;color:#4a3820;margin-bottom:10px">POSITIONAL CARRY RULES</div>
+    <div>① <span>ANCHOR</span> — 3PM price sets next day's Gann grid. Recalculate every day.</div>
+    <div>② <span>SL</span> — Daily candle CLOSE basis only. Ignore intraday spikes.</div>
+    <div>③ <span>TRAIL</span> — After T1: SL→entry. After T2: SL→T1. Never let winner become loser.</div>
+    <div>④ <span>BOOKING</span> — Book 30% at T1, 30% at T2, trail rest to T3/T4.</div>
+    <div>⑤ <span>NEUTRAL</span> — If 3PM within 45° band, DO NOT take overnight position.</div>
+    <div>⑥ <span>180° RULE</span> — Always book minimum 50% at the 180° level.</div>
+    <div>⑦ <span>RECALC</span> — Note 3PM price every day and recalculate fresh.</div>
+  </div>`;
+  el.innerHTML=h;
+}
+
+// ── WHEEL ─────────────────────────────────────────────────────────────────────
+function rW(){
+  const el=document.getElementById('twheel'),p=S.price;
+  if(!p||p<=0){el.innerHTML='<div class="empty">ENTER A PRICE TO RENDER THE WHEEL</div>';return;}
+  const lvls=GL(p,S.degs),S2=380,cx=190,cy=190,mR=150;
+  const pol=(deg,r)=>{const rad=((deg-90)*Math.PI)/180;return[cx+r*Math.cos(rad),cy+r*Math.sin(rad)];};
+  const av=[p,...lvls.flatMap(l=>[...l.r,...l.s])];
+  const mx=Math.max(...av),mn=Math.max(0,Math.min(...av)*.9);
+  const sc=v=>((v-mn)/(mx-mn||1))*mR*.84+mR*.09;
+  const pr=sc(p);
+  let svg=`<div style="display:flex;flex-direction:column;align-items:center;gap:14px">
+  <svg width="${S2}" height="${S2}" viewBox="0 0 ${S2} ${S2}" style="overflow:visible">
+  <defs><filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+  [1,.66,.33].forEach((f,i)=>svg+=`<circle cx="${cx}" cy="${cy}" r="${mR*f}" fill="none" stroke="#1a1510" stroke-width="${i===0?1:.5}" stroke-dasharray="${i===0?'none':'4,4'}"/>`);
+  AD.forEach(deg=>{const[x2,y2]=pol(deg,mR);const on=S.degs.includes(deg);svg+=`<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="${on?DC[deg]+'55':'#1a1510'}" stroke-width="${on?1.5:.5}"/>`;});
+  AD.forEach(deg=>{const[lx,ly]=pol(deg,mR+18);const on=S.degs.includes(deg);
+    svg+=`<text x="${lx}" y="${ly-5}" text-anchor="middle" font-size="9" fill="${on?DC[deg]:'#3a2c10'}" font-family="'Share Tech Mono',monospace">${deg}°</text>`;
+    svg+=`<text x="${lx}" y="${ly+6}" text-anchor="middle" font-size="7" fill="${on?DC[deg]+'88':'#2a2215'}" font-family="'Share Tech Mono',monospace">${DL[deg]}</text>`;
+  });
+  svg+=`<circle cx="${cx}" cy="${cy}" r="${pr}" fill="none" stroke="#6ee7b766" stroke-width="2" stroke-dasharray="6,3"/>`;
+  lvls.forEach(({deg,r,s})=>{
+    const color=DC[deg];
+    r.forEach((v,i)=>{const rr=sc(v);const[px,py]=pol(deg,rr);const rad=(deg-90)*Math.PI/180;const lx=px+Math.cos(rad)*14,ly=py+Math.sin(rad)*14;
+      svg+=`<circle cx="${px}" cy="${py}" r="${5-i}" fill="${color}" opacity="${1-i*.22}" filter="url(#glow)"/>`;
+      svg+=`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="7" fill="${color}" font-family="'Share Tech Mono',monospace">${v>=1000?(v/1000).toFixed(1)+'k':Math.round(v)}</text>`;
+    });
+    s.forEach((v,i)=>{const rr=sc(v);const[px,py]=pol(deg,rr);
+      svg+=`<circle cx="${px}" cy="${py}" r="${4-i}" fill="none" stroke="${color}" stroke-width="1.5" opacity="${1-i*.25}"/>`;
+    });
+    if(r[0]){const rr=sc(r[0]);const[ax,ay]=pol(deg-20,rr);const[bx,by]=pol(deg+20,rr);svg+=`<path d="M${ax} ${ay} A${rr} ${rr} 0 0 1 ${bx} ${by}" fill="none" stroke="${color}" stroke-width="3" opacity=".35" stroke-linecap="round"/>`;}
+  });
+  svg+=`<circle cx="${cx}" cy="${cy}" r="24" fill="#0a0805" stroke="#f59e0b" stroke-width="1.5" filter="url(#glow)"/>`;
+  svg+=`<text x="${cx}" y="${cy-7}" text-anchor="middle" font-size="7" fill="#7a6030" font-family="'Share Tech Mono',monospace">PRICE</text>`;
+  svg+=`<text x="${cx}" y="${cy+7}" text-anchor="middle" font-size="10" fill="#f59e0b" font-weight="bold" font-family="'Share Tech Mono',monospace">${p>=10000?(p/1000).toFixed(1)+'k':p}</text>`;
+  svg+=`</svg><div style="display:flex;gap:18px;font-size:9px;letter-spacing:1px;flex-wrap:wrap;justify-content:center;color:#4a3820">
+    <span style="color:#6ee7b7">◎ PRICE RING</span><span>● FILLED = RESISTANCE · ○ OPEN = SUPPORT</span></div></div>`;
+  el.innerHTML=svg;
+}
+
+// ── GRID ──────────────────────────────────────────────────────────────────────
+function rG(){
+  const el=document.getElementById('tgrid'),p=S.price;
+  const lvls=p>0?GL(p,[45,90,180,360]):[];
+  const hl=new Set();
+  if(p>0){hl.add(Math.round(p));lvls.forEach(({r,s})=>{r.forEach(v=>hl.add(Math.round(v)));s.forEach(v=>hl.add(Math.round(v)));});}
+  let h=`<div style="font-size:9px;color:#4a3820;letter-spacing:2px;margin-bottom:12px">SPIRAL 1→169 · HOVER CELLS · GREEN = COMPUTED LEVELS</div>
+  <div class="spiral">`;
+  SPIRAL.forEach(row=>row.forEach(val=>{
+    const isC=false,isH=val&&hl.has(val),isPSq=val&&Number.isInteger(Math.sqrt(val));
+    let bg='#0a0a0f',c='#2a2215',br='#1a1510';
+    if(val===1){bg='#1a0f00';c='#f59e0b';br='#f59e0b';}
+    else if(isH){bg='#0d1a0d';c='#6ee7b7';br='#10b981';}
+    else if(isPSq){bg='#100d04';c='#7a5820';br='#3d2e0a';}
+    const fs=val>99?6:val>9?7:8;
+    h+=`<div class="scell" style="background:${bg};border-color:${br};color:${c};font-size:${fs}px;font-weight:${isH?'bold':'normal'};box-shadow:${isH?'0 0 4px #10b98144':val===1?'0 0 8px #f59e0b44':'none'}" onmouseover="this.style.background='#1a1408';this.style.color='#f59e0b'" onmouseout="this.style.background='${bg}';this.style.color='${c}'">${val}</div>`;
+  }));
+  h+=`</div><div style="display:flex;gap:14px;margin-top:12px;font-size:9px;letter-spacing:2px;flex-wrap:wrap">
+    <span style="color:#f59e0b">■ CENTER</span><span style="color:#10b981">■ GANN LEVELS</span><span style="color:#7a5820">■ PERFECT SQUARES (360°)</span></div>`;
+  el.innerHTML=h;
+}
+
+// ── TIME ANGLE ────────────────────────────────────────────────────────────────
+function rT(){
+  const el=document.getElementById('ttime');
+  const sd=S.sd,ed=S.ed,ap=S.ap,cp2=S.cp,tol=S.tol;
+  const cd=Math.max(0,Math.round((new Date(ed)-new Date(sd))/86400000));
+  const td=cTD(sd,ed);
+  const ca=+((cd/365)*360).toFixed(2);
+  const ta=+((td/252)*360).toFixed(2);
+
+  // Confluence windows
+  let cWins=[];
+  if(ap>0){
+    const sq=Math.sqrt(ap),today=new Date();
+    AD.forEach(deg=>{
+      for(let n=1;n<=6;n++){
+        const total=deg*n,calD=Math.round((total/360)*365),tradD=Math.round((total/360)*252);
+        const calDate=addCD(sd,calD),tradDate=addTD(sd,tradD);
+        const dateObj=new Date(calDate),dAway=Math.round((dateObj-today)/86400000);
+        const priceR=+(Math.pow(sq+(deg/360)*n,2)).toFixed(0);
+        const priceS=+(Math.pow(Math.max(.01,sq-(deg/360)*n),2)).toFixed(0);
+        let cR='NONE',cS='NONE';
+        if(cp2>0){
+          const pR=Math.abs(cp2-priceR)/priceR*100,pS=Math.abs(cp2-priceS)/priceS*100;
+          if(pR<=tol)cR=pR<=.2?'EXACT':'HIGH';else if(pR<=tol*3)cR='WATCH';
+          if(pS<=tol)cS=pS<=.2?'EXACT':'HIGH';else if(pS<=tol*3)cS='WATCH';
+        }
+        cWins.push({deg,n,total,calDate,tradDate,dAway,priceR,priceS,cR,cS,weekday:new Date(calDate).toLocaleDateString('en-IN',{weekday:'short'}),isPast:dAway<0});
+      }
+    });
+    cWins.sort((a,b)=>new Date(a.calDate)-new Date(b.calDate));
+  }
+  const upcoming=cWins.filter(w=>w.dAway>=-5&&w.dAway<=60);
+  const highConf=cWins.filter(w=>!w.isPast&&(w.cR==='EXACT'||w.cR==='HIGH'||w.cS==='EXACT'||w.cS==='HIGH')).slice(0,8);
+  const CC={EXACT:'#ec4899',HIGH:'#f59e0b',WATCH:'#6ee7b7',NONE:'#2a2215'};
+  const CB={EXACT:'#1a0410',HIGH:'#1a1005',WATCH:'#0a120a',NONE:'transparent'};
+
+  let h=`<div style="font-size:9px;color:#4a3820;letter-spacing:2px;margin-bottom:14px">TIME → ANGLE CONVERTER · GANN TIME CYCLE FORECAST</div>
+  <div class="mbtns">
+    <button class="mbtn${S.tmode==='calendar'?' active':''}" onclick="S.tmode='calendar';rT()">CALENDAR DAYS</button>
+    <button class="mbtn${S.tmode==='trading'?' active':''}" onclick="S.tmode='trading';rT()">TRADING DAYS</button>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+    <div><div class="clabel">START DATE (KEY HIGH / LOW)</div><input type="date" value="${sd}" onchange="S.sd=this.value;rT()" style="font-size:13px;padding:7px 10px"></div>
+    <div><div class="clabel">END DATE (TODAY OR TARGET)</div><input type="date" value="${ed}" onchange="S.ed=this.value;rT()" style="font-size:13px;padding:7px 10px"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+    <div><div class="clabel">PRICE AT START DATE</div><input type="number" value="${ap||''}" placeholder="e.g. 21964" oninput="S.ap=parseFloat(this.value)||0;rT()" style="font-size:14px;padding:7px 10px"></div>
+    <div><div class="clabel">CURRENT PRICE</div><input type="number" value="${cp2||''}" placeholder="e.g. 24100" oninput="S.cp=parseFloat(this.value)||0;rT()" style="font-size:14px;padding:7px 10px"></div>
+    <div><div class="clabel">TOLERANCE %</div><div class="tbtns">
+      ${[.25,.5,1].map(t=>`<button class="tbtn2${tol===t?' active':''}" onclick="S.tol=${t};rT()">${t}%</button>`).join('')}
+    </div></div>
+  </div>
+  <div class="stat4">
+    ${[{l:'CAL DAYS',v:cd,c:'#f59e0b'},{l:'TRAD DAYS',v:td,c:'#10b981'},{l:'CAL ANGLE',v:ca.toFixed(2)+'°',c:'#3b82f6'},{l:'TRAD ANGLE',v:ta.toFixed(2)+'°',c:'#a855f7'}]
+    .map(({l,v,c})=>`<div class="sbox"><div class="sboxl">${l}</div><div class="sboxv" style="color:${c}">${v}</div></div>`).join('')}
+  </div>`;
+
+  // Clock SVG
+  const clkA=(ca%360-90)*Math.PI/180,large=(ca%360)>180?1:0;
+  const sx=60,sy=10,ex=60+50*Math.cos(clkA),ey=60+50*Math.sin(clkA);
+  const tA=(ta%360-90)*Math.PI/180,tLarge=(ta%360)>180?1:0;
+  const tx=60,ty=22,tex=60+38*Math.cos(tA),tey=60+38*Math.sin(tA);
+  const act=S.tmode==='calendar';
+  h+=`<div style="display:flex;gap:20px;align-items:center;margin-bottom:20px;flex-wrap:wrap">
+  <svg width="120" height="120">
+    <circle cx="60" cy="60" r="54" fill="none" stroke="#1a1510" stroke-width="1"/>
+    ${[0,90,180,270].map(a=>{const r=(a-90)*Math.PI/180;return`<line x1="60" y1="60" x2="${60+54*Math.cos(r)}" y2="${60+54*Math.sin(r)}" stroke="#1a1510" stroke-width=".5"/>`;}).join('')}
+    ${ca>0?`<path d="M${sx} ${sy} A 50 50 0 ${large} 1 ${ex} ${ey}" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+    <circle cx="${ex}" cy="${ey}" r="5" fill="#3b82f6"/>`:''} 
+    ${ta>0?`<path d="M${tx} ${ty} A 38 38 0 ${tLarge} 1 ${tex} ${tey}" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
+    <circle cx="${tex}" cy="${tey}" r="4" fill="#a855f7"/>`:''} 
+    <text x="60" y="63" text-anchor="middle" font-size="7" fill="#5a4820" font-family="'Share Tech Mono',monospace">TIME</text>
+  </svg>
+  <div style="font-size:11px;color:#5a4820;line-height:2">
+    <div><span style="color:#3b82f6">●</span> Calendar: <span style="color:#6ee7b7">${ca}°</span></div>
+    <div><span style="color:#a855f7">●</span> Trading: <span style="color:#6ee7b7">${ta}°</span></div>
+    <div style="margin-top:4px;font-size:10px">Cycles: <span style="color:#f59e0b">${((act?cd:td)/(act?365:252)).toFixed(3)}</span></div>
+    <div style="font-size:10px">Full 360° = <span style="color:#f59e0b">${act?'365 cal days':'252 trad days'}</span></div>
+  </div></div>`;
+
+  // Confluence alerts
+  if(ap>0){
+    if(highConf.length>0){
+      h+=`<div class="conf-banner"><div style="font-size:10px;letter-spacing:3px;color:#ec4899;margin-bottom:10px">⚡ TIME + PRICE CONFLUENCE ALERTS</div>`;
+      highConf.forEach(w=>{
+        const side=(w.cR==='EXACT'||w.cR==='HIGH')?'R':'S';
+        const price=side==='R'?w.priceR:w.priceS,cl=side==='R'?w.cR:w.cS;
+        h+=`<div class="crow" style="background:${CB[cl]};border-color:${CC[cl]}44">
+          <div style="width:8px;height:8px;border-radius:50%;background:${CC[cl]};flex-shrink:0;box-shadow:0 0 6px ${CC[cl]}"></div>
+          <div style="flex:1"><span style="color:${CC[cl]};font-weight:bold;font-size:11px">${w.calDate}</span><span style="color:#5a4820;font-size:9px;margin-left:8px">${w.weekday} · ${w.dAway>0?'+'+w.dAway+' days':'TODAY'}</span></div>
+          <div style="text-align:right"><div style="font-size:12px;color:${DC[w.deg]};font-weight:bold">${w.deg}° × ${w.n} = ${w.total}°</div><div style="font-size:11px;color:${CC[cl]};font-weight:bold">${price.toLocaleString('en-IN')} (${side})</div></div>
+          <span class="cbadge" style="color:${CC[cl]};background:${CB[cl]};border-color:${CC[cl]}44">${cl}</span>
+        </div>`;
+      });
+      h+=`</div>`;
+    }
+    if(upcoming.length>0){
+      h+=`<div class="card" style="margin-bottom:14px"><div class="clabel">UPCOMING TIME WINDOWS · NEXT 60 DAYS · SQUARED PRICE TARGETS</div>
+      <div style="overflow-x:auto"><table><thead><tr>${['DATE','DAY','DEG','CYCLE','TIME°','PRICE R','PRICE S','STATUS'].map(x=>`<th style="font-size:8px">${x}</th>`).join('')}</tr></thead><tbody>`;
+      upcoming.forEach(w=>{
+        const bc=[w.cR,w.cS].find(c=>c!=='NONE')||'NONE';
+        const rb=bc==='EXACT'?'#1a0410':bc==='HIGH'?'#1a1005':bc==='WATCH'?'#0a120a':'transparent';
+        h+=`<tr style="border-bottom:1px solid #1a1510;background:${rb}">
+          <td style="color:${w.dAway<=3&&w.dAway>=-3?'#6ee7b7':'#e2c87a'};font-weight:${w.dAway<=3?'bold':'normal'};font-size:11px">${w.calDate}</td>
+          <td style="color:#5a4820;font-size:10px">${w.weekday}</td>
+          <td style="color:${DC[w.deg]};font-weight:bold">${w.deg}°</td>
+          <td style="color:#5a4820">×${w.n}</td>
+          <td style="color:#f59e0b">${w.total}°</td>
+          <td style="color:${CC[w.cR]};font-weight:${w.cR!=='NONE'?'bold':'normal'}">${w.priceR.toLocaleString('en-IN')}${w.cR!=='NONE'?'◉':''}</td>
+          <td style="color:${CC[w.cS]};font-weight:${w.cS!=='NONE'?'bold':'normal'}">${w.priceS.toLocaleString('en-IN')}${w.cS!=='NONE'?'◉':''}</td>
+          <td>${bc!=='NONE'?`<span style="color:${CC[bc]};font-size:9px;font-weight:bold">${bc}</span>`:'<span style="color:#2a2215;font-size:9px">—</span>'}</td>
+        </tr>`;
+      });
+      h+=`</tbody></table></div></div>
+      <div style="display:flex;gap:16px;margin-bottom:14px;font-size:9px;letter-spacing:1px;flex-wrap:wrap">
+        ${[['EXACT','#ec4899','Within 0.2% of time-squared level'],['HIGH','#f59e0b','Within tolerance band'],['WATCH','#6ee7b7','Within 3× tolerance — monitor']].map(([l,c,d])=>`<div style="display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:${c}"></div><span style="color:${c}">${l}</span><span style="color:#3a2c10">${d}</span></div>`).join('')}
+      </div>`;
+    }
+  }
+
+  // Forecast table
+  const forecasts=Array.from({length:4},(_,i)=>{
+    const n=i+1,total=S.tdeg*n,calD=Math.round((total/360)*365),tradD=Math.round((total/360)*252);
+    return{n,total,calDate:addCD(sd,calD),calD,tradDate:addTD(sd,tradD),tradD};
+  });
+  h+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+    <span style="font-size:9px;letter-spacing:3px;color:#5a4820">FORECAST TARGET °:</span>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${AD.map(d=>`<button style="background:${S.tdeg===d?DC[d]+'22':'transparent'};border:1px solid ${S.tdeg===d?DC[d]:'#2a2010'};border-radius:3px;color:${S.tdeg===d?DC[d]:'#3a2c10'};font-size:11px;padding:4px 9px;cursor:pointer;font-family:inherit" onclick="S.tdeg=${d};rT()">${d}°</button>`).join('')}</div>
+  </div>
+  <div style="overflow-x:auto"><table><thead><tr>${['CYCLE','TOTAL°','CAL DAYS','CAL DATE','TRAD DAYS','TRAD DATE','DAY'].map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>`;
+  forecasts.forEach(({n,total,calDate,calD,tradDate,tradD})=>{
+    const isFut=new Date(calDate)>=new Date();
+    h+=`<tr style="border-bottom:1px solid #1a1510;background:${isFut&&n===1?'#0f0d04':'transparent'}">
+      <td style="color:${DC[S.tdeg]};font-weight:bold">${n}×${S.tdeg}°</td>
+      <td style="color:#f59e0b">${total}°</td>
+      <td style="color:#5a4820">${calD}</td>
+      <td style="color:#6ee7b7;font-weight:${isFut?'bold':'normal'}">${calDate}</td>
+      <td style="color:#5a4820">${tradD}</td>
+      <td style="color:#a855f7">${tradDate}</td>
+      <td style="color:#5a4820">${wd(calDate)}</td>
+    </tr>`;
+  });
+  h+=`</tbody></table></div>
+  <div style="margin-top:14px;padding:10px 14px;background:#0f0d07;border:1px solid #2a2010;border-radius:4px;font-size:10px;color:#4a3820;line-height:1.9">
+    <strong style="color:#5a4820">CONFLUENCE:</strong> Enter price at start date + current price. Engine computes "time-squared" prices for every upcoming Gann time window across all 8 degrees. When current price = squared price at a time window → EXACT confluence → high probability reversal date.
+  </div>`;
+  el.innerHTML=h;
+}
+
+init();
+</script>
+</body>
+</html>
