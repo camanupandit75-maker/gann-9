@@ -239,6 +239,8 @@ function rL(){
 
 // ── INTRADAY ──────────────────────────────────────────────────────────────────
 function rI(){
+  const activeId=document.activeElement?.id;
+  const cursorPos=document.activeElement?.selectionStart;
   const el=document.getElementById('tintraday'),rp=S.price;
   if(!rp||rp<=0){el.innerHTML='<div class="empty">ENTER YESTERDAY\'S CLOSE IN THE PRICE INPUT ABOVE FIRST</div>';return;}
   const l4=GL(rp,[45,90,180,360]),all=AFL(rp,[45,90,180,360]),op=S.open;
@@ -318,10 +320,14 @@ function rI(){
     <div>⑥ <span>180° LEVEL</span> — high probability reversal · consider squaring off</div>
   </div>`;
   el.innerHTML=h;
+  // Restore focus and cursor position after re-render
+  if(activeId){const el2=document.getElementById(activeId);if(el2){el2.focus();if(cursorPos!==undefined)try{el2.setSelectionRange(cursorPos,cursorPos);}catch(e){}}}
 }
 
 // ── POSITIONAL ────────────────────────────────────────────────────────────────
 function rP(){
+  const activeId=document.activeElement?.id;
+  const cursorPos=document.activeElement?.selectionStart;
   const el=document.getElementById('tpositional'),cp=S.price,pm3=S.pm3;
   if(!cp||cp<=0){el.innerHTML='<div class="empty">ENTER PREVIOUS CLOSE IN THE PRICE INPUT ABOVE FIRST</div>';return;}
   const cl=GL(cp,[45,90,180,360]);
@@ -424,6 +430,7 @@ function rP(){
     <div>⑦ <span>RECALC</span> — Note 3PM price every day and recalculate fresh.</div>
   </div>`;
   el.innerHTML=h;
+  if(activeId){const el2=document.getElementById(activeId);if(el2){el2.focus();if(cursorPos!==undefined)try{el2.setSelectionRange(cursorPos,cursorPos);}catch(e){}}}
 }
 
 // ── WHEEL ─────────────────────────────────────────────────────────────────────
